@@ -1,0 +1,24 @@
+apply plugin: "java"
+apply plugin: "war"
+apply plugin: "jetty"
+apply plugin: "yui3-builder-plugin"
+
+// This next block is only so we can find the yui3-builder-plugin from the source tree
+buildscript {
+    repositories {
+        flatDir {
+            dirs "../../build/libs"
+        }
+    }
+    dependencies {
+        classpath name: "yui3-builder-plugin", version: "+"
+    }
+}
+
+yui3 {
+    into "${buildDir}/yui3-modules"
+}
+
+war {
+    from "${buildDir}/yui3-modules"
+}
