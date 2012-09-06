@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
 package uk.co.grahamcox.gradlePlugins.yui3.builder
 
 /**
@@ -29,14 +31,16 @@ class DebugModuleWriter implements ModuleWriter {
     @Override
     String write(Module module) throws IOException {
         StringBuilder stringBuilder = new StringBuilder()
-        stringBuilder.append("""YUI.add("${module.moduleName}", function(Y) {
-}, "1.0.0", {
-    requires: [""")
+        stringBuilder.append("""YUI.add("${module.moduleName}", function(Y) {""")
+        module.moduleSources.each { File file ->
+            stringBuilder.append(file.text).append("\n")
+        }
+        stringBuilder.append("""}, "1.0.0", {""")
+        stringBuilder.append("requires: [")
 
         stringBuilder.append(module.dependencies.collect { dep -> "\"${dep}\"" }.join(","))
 
-        stringBuilder.append("""]
-});""")
+        stringBuilder.append("]});")
         
         return stringBuilder.toString()
     }

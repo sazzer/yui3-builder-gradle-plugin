@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
 package uk.co.grahamcox.gradlePlugins.yui3.builder
 
 import org.junit.Test
@@ -37,12 +39,31 @@ class DebugModuleWriterTest {
 
         Assert.assertNotNull(written)
 
-        String expected = """\
-YUI.add("empty", function(Y) {
-}, "1.0.0", {
-    requires: ["base","model"]
-});"""
-    Assert.assertEquals(expected, written)
+        String expected = """YUI.add("empty", function(Y) {}, "1.0.0", {requires: ["base","model"]});"""
+        Assert.assertEquals(expected, written)
+    }
+
+    /**
+     * Write a module that contains two files
+     */
+    @Test
+    public void testWriteFiles() {
+        Module module = new Module()
+        module.moduleName = "empty"
+        module.dependencies = ["base", "model"]
+        module.moduleSources = [
+            new File(getClass().getResource("/modules/simple/a").toURI()),
+            new File(getClass().getResource("/modules/simple/b").toURI())
+        ]
+
+        ModuleWriter moduleWriter = new DebugModuleWriter()
+        String written = moduleWriter.write(module)
+
+        Assert.assertNotNull(written)
+
+        String expected = """YUI.add("empty", function(Y) {abc\n123\n}, "1.0.0", {requires: ["base","model"]});"""
+        Assert.assertEquals(expected, written)
+
     }
 }
 
