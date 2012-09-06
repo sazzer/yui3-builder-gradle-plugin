@@ -63,7 +63,24 @@ class DebugModuleWriterTest {
 
         String expected = """YUI.add("empty", function(Y) {abc\n123\n}, "1.0.0", {requires: ["base","model"]});"""
         Assert.assertEquals(expected, written)
+    }
 
+    @Test
+    public void testWriteReal() {
+        def moduleLoader = new ModuleLoader()
+        def moduleFile = new File(getClass().getResource("/modules/working/model/build.properties").toURI())
+        def expectedFile = new File(getClass().getResource("/modules/working/model/output.js").toURI())
+        def module = moduleLoader.load(moduleFile)
+
+        Assert.assertNotNull(module)
+
+        ModuleWriter moduleWriter = new DebugModuleWriter()
+        String written = moduleWriter.write(module)
+
+        Assert.assertNotNull(written)
+
+        String expected = expectedFile.text
+        Assert.assertEquals(expected, written)
     }
 }
 

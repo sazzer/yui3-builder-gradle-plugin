@@ -1,4 +1,4 @@
-/**
+YUI.add("model", function(Y) {/**
  * Example class for testing the Module Builder code
  * @class Model
  */
@@ -28,3 +28,4 @@ var Model = Y.Base.create("Model", Y.Model, [
 });
 
 Y.namespace("Example").Model = Model;
+}, "1.0.0", {requires: ["base","model"]});
