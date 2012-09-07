@@ -2,7 +2,13 @@ apply plugin: "groovy"
 
 version = "0.0.1-SNAPSHOT"
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile gradleApi()
     groovy localGroovy()
+    testCompile "junit:junit:+"
+    testCompile "org.easymock:easymock:+"
 }
