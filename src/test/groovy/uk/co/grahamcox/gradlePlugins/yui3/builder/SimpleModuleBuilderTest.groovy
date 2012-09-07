@@ -24,7 +24,7 @@ import org.junit.Assert
 /**
  * Unit tests for the Module Builder
  */
-class ModuleBuilderTest {
+class SimpleModuleBuilderTest {
     /** The builder to test */
     def builder
 
@@ -33,7 +33,7 @@ class ModuleBuilderTest {
      */
     @Before
     public void setup() {
-        builder = new ModuleBuilder()
+        builder = new SimpleModuleBuilder()
         builder.moduleWriter = new DebugModuleWriter()
         builder.moduleFileNamer = new TemplatedModuleFileNamer()
         builder.moduleFileNamer.template = '${name}/${name}.js';

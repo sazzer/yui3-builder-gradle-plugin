@@ -14,13 +14,30 @@
  * limitations under the License.
  */
 
+
 package uk.co.grahamcox.gradlePlugins.yui3.builder
 
-public interface ModuleBuilder {
+/**
+ * Actual builder to build a Module into an output file
+ */
+class SimpleModuleBuilder implements ModuleBuilder {
+    /** The module writer to use */
+    def moduleWriter;
+
+    /** The module file namer to use */
+    def moduleFileNamer;
+
     /**
      * Actually build the module into the output base directory
      * @param module The module to write to the output
      * @param outputBase The base directory to write modules to
      */
-    public void build(Module module, File outputBase);
+    @Override
+    public void build(Module module, File outputBase) {
+        String moduleContents = moduleWriter.write(module)
+        File targetFile = moduleFileNamer.writeFileName(outputBase, module)
+        targetFile.parentFile.mkdirs()
+        targetFile.write(moduleContents)
+    }
 }
+
