@@ -14,17 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.co.grahamcox.gradlePlugins.yui3
+package uk.co.grahamcox.gradlePlugins.yui3.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.DefaultTask
-import org.gradle.tooling.internal.provider.TasksFactory
+
 import org.gradle.api.Task
-import org.gradle.api.plugins.WarPlugin
 
 /**
  * The main Plugin class for the YUI3 Builder plugin

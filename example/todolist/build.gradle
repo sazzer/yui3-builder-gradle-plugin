@@ -16,7 +16,7 @@ buildscript {
 }
 
 yui3 {
-    into "${buildDir}/yui3-modules"
+    into "${buildDir}/yui3-modules/js"
 }
 
 war {

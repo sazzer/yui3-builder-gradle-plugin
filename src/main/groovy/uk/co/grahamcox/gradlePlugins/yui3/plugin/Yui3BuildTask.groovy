@@ -14,17 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.co.grahamcox.gradlePlugins.yui3
+package uk.co.grahamcox.gradlePlugins.yui3.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.plugins.WarPlugin
-import org.gradle.api.tasks.bundling.War
+import uk.co.grahamcox.gradlePlugins.yui3.builder.Yui3Builder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * The actual task to build the YUI3 modules
  */
 class Yui3BuildTask extends DefaultTask {
+    /** The logger to use */
+    private static final Logger LOG = LoggerFactory.getLogger(Yui3BuildTask)
 
     /**
      * Construct the task
@@ -40,10 +43,14 @@ class Yui3BuildTask extends DefaultTask {
     def generateModules() {
         def convention = this.project.convention.plugins.yui3
         def toPath = new File(convention.toPath)
+        def fromPath = new File(convention.fromPath)
         if (!toPath.exists()) {
             toPath.mkdirs()
         }
-        def log = new File(toPath, "log")
-        log.write("Testing")
+
+        LOG.info("About to build modules from {} into {}", fromPath, toPath)
+
+        def builder = new Yui3Builder()
+        builder.build(fromPath, toPath)
     }
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.co.grahamcox.gradlePlugins.yui3
+package uk.co.grahamcox.gradlePlugins.yui3.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.WarPlugin
@@ -26,8 +26,8 @@ class Yui3Convention {
     /** The project being built */
     def project
 
-    /** The paths to read the modules from */
-    def fromPaths = ["src/main/javascript"]
+    /** The path to read the modules from */
+    def fromPath = "src/main/javascript"
 
     /** The path to copy the module to */
     def toPath
@@ -42,10 +42,10 @@ class Yui3Convention {
 
     /**
      * Configure the directory from which the modules should be loaded
-     * @param paths the paths to load from
+     * @param path the path to load from
      */
-    def from(String... paths) {
-        this.fromPaths.addAll(paths)
+    def from(String path) {
+        this.fromPath = path
     }
 
     /**
