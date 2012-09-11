@@ -17,6 +17,7 @@ package uk.co.grahamcox.gradlePlugins.yui3.builder
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import groovy.io.FileType
 
 /**
  * Means to load a Module definition from the provided files
@@ -47,13 +48,28 @@ class ModuleLoader {
      * @param baseDir the base directory of the module
      */
     private def buildModule(Properties properties, File baseDir) {
-        def module = new Module()
-        module.moduleName = properties.getProperty("component")
-        module.dependencies = properties.getProperty("component.requires").split(",").collect {s -> s.trim()}
+        Module module = new Module()
+        if (!properties.getProperty("component", "").isEmpty()) {
+            module.moduleName = properties.getProperty("component")
+            LOG.debug("Module name: {}", module.moduleName)
+        }
+        else {
+            module.moduleName = baseDir.name
+            LOG.warn("No module name specified. Using directory name: {}", module.moduleName)
+        }
 
-        def sourceDir = new File(baseDir, "js")
-        def sourceFiles = properties.getProperty("component.jsfiles", "")
-        if (sourceFiles.length() > 0) {
+        if (!properties.getProperty("component.requires", "").isEmpty()) {
+            module.dependencies = properties.getProperty("component.requires").split(",").collect {s -> s.trim()}
+            LOG.debug("Module dependencies: {}", module.dependencies)
+        }
+        else {
+            module.dependencies = []
+            LOG.debug("No module dependencies specified")
+        }
+
+        File sourceDir = new File(baseDir, "js")
+        String sourceFiles = properties.getProperty("component.jsfiles", "")
+        if (!sourceFiles.isEmpty()) {
             if (sourceDir.isDirectory()) {
                 sourceFiles.split(",").each {f ->
                     def file = new File(sourceDir, f)
@@ -72,7 +88,17 @@ class ModuleLoader {
             }
         }
         else {
-            LOG.debug("No source files specified for module: {}", module.moduleName)
+            if (sourceDir.isDirectory()) {
+                LOG.warn("No source files specified for module: {}. Using all files in {}", module.moduleName, sourceDir)
+                sourceDir.eachFileRecurse(FileType.FILES, { File f ->
+                    if (f.name.toLowerCase().endsWith(".js")) {
+                        module.moduleSources.add(f)
+                    }
+                })
+            }
+            else {
+                LOG.debug("No sources and no source files. Empty module")
+            }
         }
         return module
     }

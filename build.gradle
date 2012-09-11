@@ -9,6 +9,7 @@ repositories {
 dependencies {
     compile gradleApi()
     groovy localGroovy()
+    compile "com.yahoo.platform.yui:yuicompressor:+"
     testCompile "junit:junit:+"
     testCompile "org.easymock:easymock:+"
 }

@@ -39,7 +39,7 @@ class Yui3BuilderPlugin implements Plugin<Project> {
         LOG.debug("Building YUI3 modules for project {}", project)
 
         if (!project.convention.plugins.yui3) {
-            Yui3Convention pluginConvention = new Yui3Convention(project)
+            Yui3Convention pluginConvention = new Yui3Convention()
             project.convention.plugins.yui3 = pluginConvention
         }
 

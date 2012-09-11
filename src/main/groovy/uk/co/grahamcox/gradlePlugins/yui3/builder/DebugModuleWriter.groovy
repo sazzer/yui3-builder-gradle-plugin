@@ -23,7 +23,7 @@ package uk.co.grahamcox.gradlePlugins.yui3.builder
  */
 class DebugModuleWriter implements ModuleWriter {
     /**
-     * Write the provided module to the provided output stream
+     * Write the provided module
      * @param module The module to write
      * @return the contents of the module file
      * @throws IOException if the module couldn't be written

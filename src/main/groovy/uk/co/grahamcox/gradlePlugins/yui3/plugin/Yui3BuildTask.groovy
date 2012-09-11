@@ -42,7 +42,7 @@ class Yui3BuildTask extends DefaultTask {
     @TaskAction
     def generateModules() {
         def convention = this.project.convention.plugins.yui3
-        def toPath = new File(convention.toPath)
+        def toPath = new File(convention.toPath, convention.outputBase)
         def fromPath = new File(convention.fromPath)
         if (!toPath.exists()) {
             toPath.mkdirs()
@@ -51,6 +51,12 @@ class Yui3BuildTask extends DefaultTask {
         LOG.info("About to build modules from {} into {}", fromPath, toPath)
 
         def builder = new Yui3Builder()
-        builder.build(fromPath, toPath)
+        builder.to = toPath
+        builder.from = fromPath
+        builder.loaderBase = convention.loaderBase
+        builder.groupName = convention.groupName
+        builder.loaderFile = new File(toPath, convention.loaderFilename)
+
+        builder.build()
     }
 }

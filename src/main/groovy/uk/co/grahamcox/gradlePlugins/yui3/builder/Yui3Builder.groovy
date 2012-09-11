@@ -26,6 +26,23 @@ class Yui3Builder {
     /** The module builder to use */
     private ModuleBuilder moduleBuilder
 
+    /** The loader builder to use */
+    private YuiLoaderBuilder loaderBuilder
+
+    /** The directory to load sources from */
+    private File from
+
+    /** The directory to write output to */
+    private File to
+
+    /** The base directory for the loader */
+    private String loaderBase
+
+    /** The group name for the loader */
+    private String groupName
+
+    /** The file to write the loader to */
+    private File loaderFile
     /**
      * Construct the builder, setting up everything necessary to actually build the modules
      */
@@ -45,25 +62,32 @@ class Yui3Builder {
         def rawModuleBuilder = new SimpleModuleBuilder()
         rawModuleBuilder.moduleFileNamer = rawModuleFileNamer
         rawModuleBuilder.moduleWriter = debugModuleWriter
+        rawModuleBuilder.moduleWriter = debugModuleWriter
 
         def minModuleFileNamer = new TemplatedModuleFileNamer()
         minModuleFileNamer.template = '${name}/${name}-min.js'
         def minModuleBuilder = new SimpleModuleBuilder()
         minModuleBuilder.moduleFileNamer = minModuleFileNamer
-        minModuleBuilder.moduleWriter = debugModuleWriter
+        minModuleBuilder.moduleWriter = new MinifiedModuleWriter()
+        minModuleBuilder.moduleWriter.moduleWriter = rawModuleBuilder.moduleWriter
 
         moduleBuilder = new ChainedModuleBuilder()
         moduleBuilder.moduleBuilders = [rawModuleBuilder, debugModuleBuilder, minModuleBuilder]
+
+        loaderBuilder = new YuiLoaderBuilder()
     }
 
     /**
      * Find all of the modules in the Input Directory, and build them into the Output Directory
-     * @param inputDirectory the Input directory to scan
-     * @param outputDirectory the output directory to write modules into
      */
-    def build(File inputDirectory, File outputDirectory) {
-        moduleFinder.findModules(inputDirectory).each {module ->
-            moduleBuilder.build(module, outputDirectory)
+    def build() {
+        def modules = moduleFinder.findModules(from)
+        modules.each {module ->
+            moduleBuilder.build(module, to)
         }
+
+        def loaderText = loaderBuilder.buildLoader(groupName, loaderBase, modules)
+
+        loaderFile.text = loaderText
     }
 }

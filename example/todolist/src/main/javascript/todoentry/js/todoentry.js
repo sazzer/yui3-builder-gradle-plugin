@@ -1,6 +1,28 @@
 var ToDoEntry = Y.Base.create("ToDoEntry", 
     Y.Model, 
     [], {
+            /**
+             * Synchronize the todo entry with the data store
+             * @param action {String} The Sync action to perform
+             * @param options {Object} Any options to the sync action
+             * @param callback {Function} Callback to trigger after the action
+             */
+            sync: function(action, options, callback) {
+                Y.log("Performing sync action: " + action);
+                switch (action) {
+                    case "create":
+                        break;
+                    case "read":
+                        break;
+                    case "update":
+                        break;
+                    case "delete":
+                        break;
+                    default:
+                        callback("Unexpected action: " + action);
+                        break;
+                }
+            }
     }, {
         ATTRS: {
             /**
@@ -43,6 +65,7 @@ var ToDoEntry = Y.Base.create("ToDoEntry",
              * @type {Number}
              */
             priority: {
+                value: 5,
                 /**
                  * Validate that the value is a number between 0 and 10 inclusive
                  * @param v {Any} The value to validate

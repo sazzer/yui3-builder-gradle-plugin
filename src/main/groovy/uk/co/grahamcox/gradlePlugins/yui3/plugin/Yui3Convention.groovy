@@ -23,22 +23,23 @@ import org.gradle.api.plugins.WarPlugin
  * Convention object for the YUI3 plugin
  */
 class Yui3Convention {
-    /** The project being built */
-    def project
-
     /** The path to read the modules from */
     def fromPath = "src/main/javascript"
 
     /** The path to copy the module to */
     def toPath
 
-    /**
-     * Construct the convention
-     * @param project the project
-     */
-    public Yui3Convention(Project project) {
-        this.project = project
-    }
+    /** The filename of the loader file to write */
+    def loaderFilename = "loader.js"
+
+    /** The base to use in the loader file */
+    def loaderBase = "js"
+
+    /** The directory underneath the toPath to write the modules to */
+    def outputBase = "js"
+
+    /** The group name to use for the modules */
+    def groupName = "yui3builder"
 
     /**
      * Configure the directory from which the modules should be loaded
@@ -54,5 +55,13 @@ class Yui3Convention {
      */
     def into(String path) {
         this.toPath = path
+    }
+
+    /**
+     * Set the YUI Loader Group Name to use
+     * @param name the group name to use
+     */
+    def groupName(String name) {
+        this.groupName = name
     }
 }

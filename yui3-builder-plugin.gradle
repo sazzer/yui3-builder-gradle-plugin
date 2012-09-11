@@ -1,0 +1,25 @@
+import org.gradle.api.internal.GradleInternal
+import org.gradle.api.internal.project.ProjectInternal
+
+buildscript {
+    def pathParts = sourceURI.path.split('/')
+    def version = pathParts[-2]
+    def basePath = pathParts[0..(pathParts.size()-5)].join('/')
+    if (sourceURI.scheme != 'file') {
+        def uri = new java.net.URI(sourceURI.scheme, sourceURI.userInfo, sourceURI.host, sourceURI.port, basePath, null, null)
+        basePath = "${uri.toString()}"
+    }
+
+    repositories {
+        mavenCentral()
+        flatDir {
+            dirs "/home/graham/source/familytree/yui3-builder-plugin/build/libs"
+        }
+    }
+    dependencies {
+        classpath name: "yui3-builder-plugin", version: "+"
+        classpath "com.yahoo.platform.yui:yuicompressor:+"
+    }
+}
+apply plugin: uk.co.grahamcox.gradlePlugins.yui3.plugin.Yui3BuilderPlugin
+

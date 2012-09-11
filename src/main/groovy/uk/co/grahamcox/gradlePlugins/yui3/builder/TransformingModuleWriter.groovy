@@ -13,20 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package uk.co.grahamcox.gradlePlugins.yui3.builder
 
 /**
- * Interface describing a way to write an actual module out
+ * Implementation of the ModuleWriter that uses a delegate to write the raw module and then
+ * transforms it on the way out
  */
-interface ModuleWriter {
+abstract class TransformingModuleWriter implements ModuleWriter {
+    /** The module writer to delegate to */
+    private ModuleWriter moduleWriter
+
     /**
+     * Set the module writer to use
+     * @param moduleWriter the module writer to use
+     */
+    void setModuleWriter(ModuleWriter moduleWriter) {
+        this.moduleWriter = moduleWriter
+    }
+/**
      * Write the provided module
      * @param module The module to write
      * @return the contents of the module file
      * @throws IOException if the module couldn't be written
      */
-    String write(Module module) throws IOException
-}
+    @Override
+    String write(Module module) {
+        return transform(moduleWriter.write(module))
+    }
 
+    /**
+     * Transform the written module
+     * @param input the untransformed module
+     * @return the transformed module
+     */
+    protected abstract String transform(String input)
+}
